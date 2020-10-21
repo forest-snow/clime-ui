@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+numpy
+torch==1.4.0
+torchtext==0.4.0
