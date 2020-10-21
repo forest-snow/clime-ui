@@ -1,6 +1,6 @@
 # CLIME: CLassifying Interactively with Multilingual Embeddings
 
-<img src="figure.png" width="60%">
+<img src="overview.png" width="60%">
 
 CLIME is a human-in-the-loop system that improves multilingual classifiers.
 Specifically, CLIME asks a bilingual user to refine pre-trianed cross-lingual word embeddings.
