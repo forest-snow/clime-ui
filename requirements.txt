@@ -4,3 +4,4 @@ Flask-Migrate
 numpy
 torch==1.4.0
 torchtext==0.4.0
+annoy==1.16.2

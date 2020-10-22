@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+    {% block content %}
+        <h2 class="text-center mb-4">CLIME</h2>
+        <h3 class="text-center mb-4">User: {{user}}</h3> 
+
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1>Instructions</h1>
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-6">
+                    Compare words with the keyword on the top.
+                </div>
+                <div class="col-6">
+                    <img src="{{ url_for('static', filename='images/keyword.png') }}" style="max-width:100%;">
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-6">
+                    (Optional) Click on a word to see an example sentence.
+                </div>
+                <div class="col-6">
+                    <img src="{{ url_for('static', filename='images/concordance1.png') }}" style="max-width:100%;" class="mb-2">
+                    <img src="{{ url_for('static', filename='images/concordance2.png') }}" style="max-width:100%;">
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-6">
+                    Press <i class="fa fa-check yes"></i> for words with <b>roughly the same meaning</b> as the keyword.
+                </div>
+                <div class="col-6">
+                    <img src="{{ url_for('static', filename='images/accept.png') }}" style="max-width:100%;">
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-6">
+                    Press <i class="fa fa-times no"></i> for words with <b>different meaning</b> as the keyword.
+                </div>
+                <div class="col-6">
+                    <img src="{{ url_for('static', filename='images/reject.png') }}" style="max-width:100%;">
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-6">
+                    To <b>undo</b> an action, click a button again.
+                </div>
+                <div class="col-6">
+                    <img src="{{ url_for('static', filename='images/undo.png') }}" style="max-width:100%;">
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-6">
+                    <b>Skip words that you are not sure about.</b>
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-6">
+                    If all words in a column have different meaning than the keyword, search for a synonym or translation with the textbox.<br/>
+                    Click on a word to add to the list.
+                </div>
+                <div class="col-6">
+                    <img src="{{ url_for('static', filename='images/add1.png') }}" style="max-width:100%;">
+                </div>
+            </div>
+            <div class="row mt-3 mb-3">
+                <div class="col-6">
+                    After reviewing all words, press "Next".
+                </div>
+                <div class="col-6">
+                    <img src="{{ url_for('static', filename='images/next.png') }}" style="max-width:100%;">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <a href="/ui/0" class="btn btn-outline-dark btn-lg m-3">Start</a>
+            </div>
+        </div>
+    
+
+    {% endblock %}

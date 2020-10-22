@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import "elements.html" as elements %}
+{% block content %}
+    <!--<h3 class="text-center mb-4">User: {{user}}</h3>        -->
+    {{ elements.modal("Word", "Docs", "context") }}
+
+    <div class="container-fluid" id="clusters">
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <p style="font-size:x-large;font-weight:bold">
+                Which words are likely to appear in the same category as<br/>
+                {% if row.lang is eq 1 %}
+                    <button class="btn l1 query" style="display:inline-block;font-size:x-large">{{row.query}}</button>
+                {% else %}
+                    <button class="btn l2 query" style="display:inline-block;font-size:x-large">{{row.query}}</button>
+                {% endif %}
+                </p>
+            </div>
+        </div>
+
+        {% block clusters %}{% endblock %}
+    </div>
+
+    <nav class="navbar fixed-bottom navbar-dark" id="bar">
+        <div class="container mt-2 mb-2 justify-content-around">
+            <!--<div class="btn-group">-->
+                <!--<a href="/restart" class="btn btn-outline-dark" id="restart">Clear</a>-->
+            <!--</div>-->
+            <div class="d-flex justify-content-center m-1" id="page">
+                <p style="margin:0">Page: <span id="current">{{page.current}}</span>/<span id="total">{{page.total}}</span></p>
+            </div>
+            <div class="d-flex justify-content-center text-dark" id="load"><p style="margin:0">Loading...</p></div>
+            <div class="btn-group">
+                <a href="/instruction" target="_blank" class="btn btn-outline-dark" id="instruct">Instructions</a>
+                <button type="button" class="btn btn-outline-dark" id="save">Next</button>
+                <!--<a href="/finish" class="btn btn-outline-dark" id="finish">Finish</a>-->
+
+            </div>
+        </div>
+    </nav>
+
+{% endblock %}

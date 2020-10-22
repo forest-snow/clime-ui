@@ -1,0 +1,66 @@
+{% extends "ui.html" %}
+{% import "elements.html" as elements %}
+{% block clusters %}
+    <div class="row cluster">
+        <!-- nearest neighbors for l1 -->
+        <div class="col-6">
+            <div class="cluster-ext l1">
+                <div class="d-flex justify-content-center l1 row pt-3">
+                    <h4 class="text-center">{{lang_labels.src}}</h4>
+                </div>
+
+                <div class="cluster-nn l1">
+                {% for word in row.nn1 %}
+                {{ elements.choice(word, 'l1') }}
+                {% endfor %}
+                </div>
+
+                <!-- input boxes to create new elements -->
+                <div class="d-flex justify-content-center l1 row pb-3">
+                    <div class="col-8">
+                        <input class="form-control l1 text-center" type="text" placeholder="Add word" style="max-width: 10em; margin:0 auto">
+                    </div>
+                    <div class="col-4"> </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- queries -->
+        <!--<div class="col-2">-->
+
+            <!--{% if row.lang is eq 1 %}-->
+                <!--<div class="btn-lg l1 query">{{row.query}}</div>-->
+            <!--{% else %}-->
+                <!--<div class="btn-lg l2 query">{{row.query}}</div>-->
+            <!--{% endif %}-->
+
+        <!--</div>-->
+
+        <!-- nearest neighbors for l2 -->
+        <div class="col-6">
+            <div class="cluster-ext l2">
+                <div class="d-flex justify-content-center l2 row pt-3">
+                    <h4 class="text-center">{{lang_labels.tgt}}</h4>
+                </div>
+
+                <div class="cluster-nn l2">
+                {% for word in row.nn2 %}
+                {{ elements.choice(word, 'l2') }}
+                {% endfor %}
+                </div>
+
+                <!-- input boxes to create new elements -->
+                <div class="d-flex justify-content-center l2 row pb-3">
+                    <div class="col-8">
+                        <input class="form-control l2 text-center" type="text" placeholder="Add word" style="max-width: 10em; margin:0 auto">
+                    </div>
+                    <div class="col-4"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
