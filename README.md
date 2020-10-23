@@ -36,6 +36,7 @@ For our English-Ilocano example, supppose we have the following files:
 * Pre-trained English-Ilocano embeddings: `data/eng.vec` and `data/ilo.vec`
 * English training set: `data/en.json`
 * Ilocano test set: `data/il.json`
+* Ilocano unlabeled set: `data/il_unlabeled.json`
 
 The embedding files use the standard word2vec text format.
 
@@ -51,6 +52,8 @@ Here is an English example:
         "text": ["a", "lot", "of", "people", "suffer", "from", "the", "bird", "flu", "here"],
         "label": 1
     }
+    
+**Note:** Due to licensing issues, we cannot publicly release the data that we used in our paper.  If you would like to get access to our data, please email us.
 
 ## Binarize Embeddings
 
@@ -88,7 +91,41 @@ The output file `data/word_rank.txt` ranks all words in the vocabulary by their 
 ## User Interface
 
 The second step in CLIME is annotating the similarity between keywords and their nearest neighbors.
-We will upload the instruction for running our user interface soon.
+The UI is implemented using Flask and needs to run locally.
+
+### Preprocessing Data for Interface
+We provide a sample, preprocessed data in `ui_data/example` for a task called `example`  
+
+If you would like to preprocess your own data, please run the following command:
+
+```
+python prepare_ui.py \
+    --src-emb embeds/en \
+    --tgt-emb embeds/il \
+    -k {number of nearest neighbors} \
+    --task task \
+    --rank data/word_rank.txt \
+    --max {max number of keywords} \
+    --src-doc data/en.json \
+    --tgt-doc data/il_unlabeled.json \
+    --src-f {# of most frequent words to include in src vocab} \
+    --tgt-f {# of most frequent words to include in tgt vocab} \
+    --src-lang ENGLISH \
+    --tgt-lang ILOCANO \
+    --categories data/categories.txt
+```
+This will preprocess the data needed for the UI in `ui_data/task`.  Note that `data/categories.txt` should contain the classification categories for the task, where each row describes a category.
+
+### Run Interface
+Run `bash clime.sh` and visit `http://127.0.0.1:5000/{task}/{user_id}` in your browser.  Replace `{task}` with the name of the task preprocessed for the UI and `{user_id}` with your chosen ID for the user (any arbitrary number).
+
+The start page will show a set of instructions.  On the next page, you will see the UI as described in the paper.  The prompt will show the categories as listed from `data/categories.txt`.  Each page will show the keyword and its nearest neighbor in each language.  Any word on the UI can be clicked on to preview concordance.  New words can be added to the UI. 
+
+### Database
+A sqlite database keeps track of the user's progress.  When the user presses `Next` on each page, their interactions are saved in this database.  When the user presses `Finish`, all their progress is saved and their session will end.  
+
+This database will expand as more users interact with the UI.  To reduce space on your machine, you may want to clear the database.  You can run `delete_db.sh` to clear all entries from the database.
+
 
 ## Update Embeddings with User Feedback
 
