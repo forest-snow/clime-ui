@@ -32,25 +32,15 @@ def concordance(word, language, task):
 
 def setup_to_page(uid, task):
     setup_file = read_paths(task)['setup']
-    # setup_file2 = read_paths(task)['setup2']
 
     with open(setup_file, 'r') as f:
         setup = json.load(f)
-
-    # if os.path.exists(setup_file2):
-        # with open(setup_file2, 'r') as f:
-            # setup2 = json.load(f)
-        # setup['queries'].append(setup2['queries'])
-        # setup['nn1'].append(setup2['nn1'])
-        # setup['nn2'].append(setup2['nn2'])
-        # setup['lang'].append(setup2['lang'])
 
     n_queries = len(setup['queries'])
     for i in range(n_queries):
         page = Page(
             page_num = i,
             keyword = setup['queries'][i],
-            lang = setup['lang'][i],
             nn1 = json.dumps(setup['nn1'][i]),
             nn2 = json.dumps(setup['nn2'][i]),
             user_id = uid,
@@ -72,13 +62,28 @@ def load_vocab(language, task):
 def load_page(user, entry):
     page = user.pages.filter_by(page_num=entry).first()
     row = {}
-    row['lang'] = page.lang
     row['query'] = page.keyword
     row['nn1'] = json.loads(page.nn1)
     row['nn2'] = json.loads(page.nn2)
     return row
 
 
+def load_lang(task):
+    setup_file = read_paths(task)['setup']
+    with open(setup_file, 'r') as f:
+        setup = json.load(f)
+    lang_labels = {
+        'src':setup['lang1'],
+        'tgt':setup['lang2']
+    }
+    return lang_labels
 
+
+def load_categories(task):
+    setup_file = read_paths(task)['setup']
+    with open(setup_file, 'r') as f:
+        setup = json.load(f)
+    categories = setup['categories']
+    return categories
 
 

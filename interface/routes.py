@@ -6,9 +6,9 @@ from interface.models import User, Page
 import json
 import pickle
 
-task_language_labels = {
-    'example':{'src':'ENGLISH', 'tgt':'FRENCH'}
-}
+# task_language_labels = {
+    # 'example':{'src':'ENGLISH', 'tgt':'FRENCH'}
+# }
 
 
 @app.route('/<string:task>/<string:worker_id>')
@@ -51,8 +51,11 @@ def ui(entry):
     row = load.load_page(user, entry)
     total = len(user.pages.all())
     page = {'current':entry+1, 'total':total}
-    lang_labels = task_language_labels[user.task]
-    return flask.render_template('ui2.html', row=row, user=uid, page=page, lang_labels=lang_labels)
+    # lang_labels = task_language_labels[user.task]
+    lang_labels = load.load_lang(user.task)
+    categories = load.load_categories(user.task)
+    return flask.render_template('ui.html', row=row, user=uid, page=page,
+                                 lang_labels=lang_labels, categories=categories)
 
 
 @app.route('/save/<int:entry>', methods=['POST'])

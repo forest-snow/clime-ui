@@ -13,7 +13,6 @@ class Page(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     page_num = db.Column(db.Integer)
     keyword = db.Column(db.String)
-    lang = db.Column(db.Integer)
     nn1 = db.Column(db.String)
     nn2 = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -28,4 +27,4 @@ class Page(db.Model):
 
 
 
- 
+
