@@ -49,13 +49,12 @@ def find_neighbors(queries, E, words, index, k):
     return nn
 
 
-def add_setup_data(queries, E, language, output, words1, words2, index1, index2, k, lang1, lang2, categories_path):
+def add_setup_data(queries, E, output, words1, words2, index1, index2, k, lang1, lang2, categories_path):
     """Outputs setup data for CLIME session.
 
     For each word in [queries], the following information is stored:
     - [k] nearest neighbors in language 1 using [index 1]
     - [k] nearest neighbors in language 2 using [index 2]
-    - [language]
 
     Also, elements to be shown on the interface, like language labels and
     document categories, are also stored
@@ -63,16 +62,11 @@ def add_setup_data(queries, E, language, output, words1, words2, index1, index2,
     if queries is None:
         return None
 
-    if language == 1:
-        words = words1
-        # need to select nearest neighbors that doesn't include the word itself
-        ind1 = (1,k+1)
-        ind2 = (0,k)
+    words = words1
+    # need to select nearest neighbors that doesn't include the word itself
+    ind1 = (1,k+1)
+    ind2 = (0,k)
 
-    else:
-        words = words2
-        ind2 = (1,k+1)
-        ind1 = (0,k)
 
 
     # find knn in both languages for queries
@@ -91,9 +85,6 @@ def add_setup_data(queries, E, language, output, words1, words2, index1, index2,
         nn1.append(n1[ind1[0]: ind1[1]])
         nn2.append(n2[ind2[0]: ind2[1]])
 
-    # need to store language index of each query
-    lang = [language for i in range(len(queries))]
-
     # parse categories
     with open(categories_path, 'r') as f:
         categories = f.read().splitlines()
@@ -102,7 +93,6 @@ def add_setup_data(queries, E, language, output, words1, words2, index1, index2,
         'queries': queries,
         'nn1':nn1,
         'nn2':nn2,
-        'lang':lang,
         'lang1':lang1,
         'lang2':lang2,
         'categories':categories
@@ -136,12 +126,12 @@ def extract_vocab(E, words, docs_json, frequency):
     return E_new, words_new
 
 
-def add_word_data(words, language, docs_json, output, max_docs=5, window=20):
+def add_word_data(words, docs_json, output, max_docs=5, window=20):
     """Prepares data about each word in [words] for interface
     and saves it to json file [output].
 
-    Adds information about concordance with snippets from [docs_json] and
-    labels language of each word as [language].  Concordance snippet is
+    Adds information about concordance with snippets from [docs_json].
+    Concordance snippet is
     controlled by [max_docs] and [window]."""
 
     # vocab contains concordance for each word
@@ -250,14 +240,14 @@ def resource(args):
     # if args.w:
     print('adding word data')
     # add data
-    add_word_data(words1, 1, args.docs1, vocab_path1)
+    add_word_data(words1, args.docs1, vocab_path1)
 
     # if args.docs2 == None:
         # # don't add chinese training data
             # with open(vocab_path2, 'w') as f:
                 # json.dump(words2, f)
         # else:
-    add_word_data(words2, 2, args.docs2, vocab_path2)
+    add_word_data(words2, args.docs2, vocab_path2)
 
     print('finish adding word data')
 
@@ -270,7 +260,7 @@ def resource(args):
     # if args.s:
     print('adding setup data')
     setup = add_setup_data(
-        queries1, E1, 1, setup_path, words1, words2, index1, index2, args.k, args.lang1, args.lang2
+        queries1, E1, setup_path, words1, words2, index1, index2, args.k, args.lang1, args.lang2, args.categories
     )
 
     print('finish adding setup data')
@@ -332,7 +322,7 @@ if __name__ == '__main__':
                         help='Source language label (to be shown on UI).')
     parser.add_argument('--tgt-lang', action='store', dest='lang2',
                         help='Target language label (to be shown on UI).')
-    parser.add_argument('--categories', action='store'
+    parser.add_argument('--categories', action='store' ,
                         help='Path to txt file containing categories (to be shown on UI).')
 
 
