@@ -6,10 +6,6 @@ from interface.models import User, Page
 import json
 import pickle
 
-# task_language_labels = {
-    # 'example':{'src':'ENGLISH', 'tgt':'FRENCH'}
-# }
-
 
 @app.route('/<string:task>/<string:worker_id>')
 def start(task, worker_id):

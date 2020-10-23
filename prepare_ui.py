@@ -49,7 +49,8 @@ def find_neighbors(queries, E, words, index, k):
     return nn
 
 
-def add_setup_data(queries, E, output, words1, words2, index1, index2, k, lang1, lang2, categories_path):
+def add_setup_data(queries, E, output, words1, words2, index1, index2, k, lang1,
+                   lang2, categories_path):
     """Outputs setup data for CLIME session.
 
     For each word in [queries], the following information is stored:
@@ -62,15 +63,12 @@ def add_setup_data(queries, E, output, words1, words2, index1, index2, k, lang1,
     if queries is None:
         return None
 
-    words = words1
     # need to select nearest neighbors that doesn't include the word itself
     ind1 = (1,k+1)
     ind2 = (0,k)
 
-
-
     # find knn in both languages for queries
-    q = [words[w] for w in queries]
+    q = [words1[w] for w in queries]
     try:
         neighbors1 = find_neighbors(q, E, words1, index1, k+1)
         neighbors2 = find_neighbors(q, E, words2, index2, k+1)
@@ -207,24 +205,11 @@ def resource(args):
     E2, words2 = extract_vocab(E2, words2, args.docs2, args.f2)
 
 
-    # create resources directory
-    # if not os.path.exists(args.ui_data):
-        # os.mkdir(args.ui_data)
 
     print('building index')
     # build indexes, one for each language
-    # nn_path1 = os.path.join(args.resources, 'nn1.idx')
-    # nn_path2 = os.path.join(args.resources, 'nn2.idx')
     index1 = neighbors.create_index(E1, index_type='annoy')
-    # index1.save(nn_path1)
     index2 = neighbors.create_index(E2, index_type='annoy')
-    # index2.save(nn_path2)
-
-    # else:
-        # index1 = AnnoyIndex(E1.size()[1])
-        # index1.load(nn_path1)
-        # index2 = AnnoyIndex(E2.size()[1])
-        # index2.load(nn_path2)
     print('finish building index')
 
 
@@ -237,43 +222,26 @@ def resource(args):
     vocab_path1 = os.path.join(ui_data_path, 'vocab1.json')
     vocab_path2 = os.path.join(ui_data_path, 'vocab2.json')
 
-    # if args.w:
     print('adding word data')
-    # add data
     add_word_data(words1, args.docs1, vocab_path1)
-
-    # if args.docs2 == None:
-        # # don't add chinese training data
-            # with open(vocab_path2, 'w') as f:
-                # json.dump(words2, f)
-        # else:
     add_word_data(words2, args.docs2, vocab_path2)
-
     print('finish adding word data')
 
-
     queries1 = get_queries(args.rank, words1, args.max)
-
     setup_path = os.path.join(ui_data_path, 'setup.json')
 
-    # output setup data
-    # if args.s:
     print('adding setup data')
     setup = add_setup_data(
         queries1, E1, setup_path, words1, words2, index1, index2, args.k, args.lang1, args.lang2, args.categories
     )
-
     print('finish adding setup data')
 
     # save paths for interface to locate them
     save_paths(args.task, vocab_path1, vocab_path2, setup_path)
 
-
-
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Updating embeddings with CLIME')
-
     # embeddings
     parser.add_argument('--src-emb', action='store', dest='dir1',
         default='embeds/en',
@@ -281,20 +249,12 @@ if __name__ == '__main__':
     parser.add_argument('--tgt-emb', action='store', dest='dir2',
         default='embeds/il',
         help='target embeddings directory')
-
     # nearest neighbors
     parser.add_argument('-k', action='store', type=int, default=10,
                         help='number of top nearest neighbors to show on UI')
-
-    # dir to store/load input for interface
-    # parser.add_argument('--ui_data', action='store',
-        # default='ui_data', help='folder to store data for UI')
-
     # name of task
     parser.add_argument('--task', action='store', dest='task',
         default='example')
-
-
     # load queries/ranking
     parser.add_argument('--rank', action='store', dest='rank',
         help='input file for word ranking in source language',
@@ -302,7 +262,6 @@ if __name__ == '__main__':
     parser.add_argument('--max', action='store', dest='max', type=int,
         default=50,
         help='max number of source queries')
-
     # load data
     parser.add_argument('--src-doc', action='store', dest='docs1',
         help='documents in source language',
@@ -310,29 +269,19 @@ if __name__ == '__main__':
     parser.add_argument('--tgt-doc', action='store', dest='docs2',
         help='documents in source language',
         default='data/il_train.json')
-
     # frequency capping
     parser.add_argument('--src-f', action='store', type=int, dest='f1',
         help='frequency capping for source language')
     parser.add_argument('--tgt-f', action='store', type=int, dest='f2',
         help='frequency capping for target language')
-
     # labels for language of data
     parser.add_argument('--src-lang', action='store', dest='lang1',
                         help='Source language label (to be shown on UI).')
     parser.add_argument('--tgt-lang', action='store', dest='lang2',
                         help='Target language label (to be shown on UI).')
+    # category labels
     parser.add_argument('--categories', action='store' ,
                         help='Path to txt file containing categories (to be shown on UI).')
-
-
-    # flags
-    # parser.add_argument('-b', action='store_true', default=False,
-        # help='build and save index')
-    # parser.add_argument('-w', action='store_true', default=False,
-        # help='save word/concordance data')
-    # parser.add_argument('-s', action='store_true', default=False,
-        # help='build setup table')
 
     args = parser.parse_args()
 

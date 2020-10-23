@@ -1,5 +1,5 @@
 import numpy as np
-import os.path 
+import os.path
 import sys
 import torch
 import torch.nn.functional as F
@@ -31,7 +31,7 @@ def create_index(X, index_type='annoy'):
         index.train(X_cont[:n_train])
         index.add(X_cont)
 
-    else: 
+    else:
         n, dim = X.size()[0], X.size()[1]
         index = AnnoyIndex(dim, metric='angular')
         for i,v in enumerate(X):
@@ -44,7 +44,6 @@ def create_index(X, index_type='annoy'):
 def find_closest(embeddings, k, index, queries, index_type='annoy'):
     if index_type == 'faiss':
         points = embeddings[queries]
-        # points = F.normalize(points)
         p = points.detach().numpy()
         q = np.ascontiguousarray(p, dtype=np.float32)
         neighbors = index.assign(q, k)

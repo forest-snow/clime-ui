@@ -6,17 +6,13 @@ import json
 from interface.models import User, Page
 from interface import db
 
-
-
 paths_file = 'paths.json'
-
 
 def read_paths(task):
     with open(paths_file, 'r') as f:
         all_paths = json.load(f)
     paths = all_paths[task]
     return paths
-
 
 def concordance(word, language, task):
     key = 'words'+str(language)
@@ -56,8 +52,6 @@ def load_vocab(language, task):
         vocab = json.load(f)
     vocab_list = list(vocab)
     return vocab_list
-
-
 
 def load_page(user, entry):
     page = user.pages.filter_by(page_num=entry).first()
