@@ -49,13 +49,16 @@ def find_neighbors(queries, E, words, index, k):
     return nn
 
 
-def add_setup_data(queries, E, language, output, words1, words2, index1, index2, k):
+def add_setup_data(queries, E, language, output, words1, words2, index1, index2, k, lang1, lang2, categories_path):
     """Outputs setup data for CLIME session.
 
     For each word in [queries], the following information is stored:
     - [k] nearest neighbors in language 1 using [index 1]
     - [k] nearest neighbors in language 2 using [index 2]
     - [language]
+
+    Also, elements to be shown on the interface, like language labels and
+    document categories, are also stored
     """
     if queries is None:
         return None
@@ -88,14 +91,21 @@ def add_setup_data(queries, E, language, output, words1, words2, index1, index2,
         nn1.append(n1[ind1[0]: ind1[1]])
         nn2.append(n2[ind2[0]: ind2[1]])
 
-    # need to store language of each query
+    # need to store language index of each query
     lang = [language for i in range(len(queries))]
+
+    # parse categories
+    with open(categories_path, 'r') as f:
+        categories = f.read().splitlines()
 
     setup = {
         'queries': queries,
         'nn1':nn1,
         'nn2':nn2,
-        'lang':lang
+        'lang':lang,
+        'lang1':lang1,
+        'lang2':lang2,
+        'categories':categories
     }
 
     with open(output, 'w') as f:
@@ -260,7 +270,7 @@ def resource(args):
     # if args.s:
     print('adding setup data')
     setup = add_setup_data(
-        queries1, E1, 1, setup_path, words1, words2, index1, index2, args.k
+        queries1, E1, 1, setup_path, words1, words2, index1, index2, args.k, args.lang1, args.lang2
     )
 
     print('finish adding setup data')
@@ -316,6 +326,14 @@ if __name__ == '__main__':
         help='frequency capping for source language')
     parser.add_argument('--tgt-f', action='store', type=int, dest='f2',
         help='frequency capping for target language')
+
+    # labels for language of data
+    parser.add_argument('--src-lang', action='store', dest='lang1',
+                        help='Source language label (to be shown on UI).')
+    parser.add_argument('--tgt-lang', action='store', dest='lang2',
+                        help='Target language label (to be shown on UI).')
+    parser.add_argument('--categories', action='store'
+                        help='Path to txt file containing categories (to be shown on UI).')
 
 
     # flags

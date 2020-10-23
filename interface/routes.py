@@ -7,9 +7,7 @@ import json
 import pickle
 
 task_language_labels = {
-    'sentiment':{'src':'ENGLISH','tgt':'CHINESE'},
-    'rcv_zh':{'src':'ENGLISH','tgt':'CHINESE'},
-    'rcv_ru':{'src':'ENGLISH','tgt':'RUSSIAN'},
+    'example':{'src':'ENGLISH', 'tgt':'FRENCH'}
 }
 
 
@@ -40,7 +38,7 @@ def start(task, worker_id):
         db.session.commit()
 
     # add page information if not in database
-    if len(user.pages.all()) == 0:    
+    if len(user.pages.all()) == 0:
         load.setup_to_page(flask.session['uid'], task)
 
     return flask.render_template('start.html', user=user.id)

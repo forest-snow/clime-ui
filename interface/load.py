@@ -15,7 +15,7 @@ def read_paths(task):
     with open(paths_file, 'r') as f:
         all_paths = json.load(f)
     paths = all_paths[task]
-    return paths    
+    return paths
 
 
 def concordance(word, language, task):
@@ -31,19 +31,19 @@ def concordance(word, language, task):
 
 
 def setup_to_page(uid, task):
-    setup_file1 = read_paths(task)['setup1']
-    setup_file2 = read_paths(task)['setup2']
+    setup_file = read_paths(task)['setup']
+    # setup_file2 = read_paths(task)['setup2']
 
-    with open(setup_file1, 'r') as f:
+    with open(setup_file, 'r') as f:
         setup = json.load(f)
 
-    if os.path.exists(setup_file2):
-        with open(setup_file2, 'r') as f:
-            setup2 = json.load(f)
-        setup['queries'].append(setup2['queries'])
-        setup['nn1'].append(setup2['nn1'])
-        setup['nn2'].append(setup2['nn2'])
-        setup['lang'].append(setup2['lang'])
+    # if os.path.exists(setup_file2):
+        # with open(setup_file2, 'r') as f:
+            # setup2 = json.load(f)
+        # setup['queries'].append(setup2['queries'])
+        # setup['nn1'].append(setup2['nn1'])
+        # setup['nn2'].append(setup2['nn2'])
+        # setup['lang'].append(setup2['lang'])
 
     n_queries = len(setup['queries'])
     for i in range(n_queries):
@@ -64,7 +64,7 @@ def load_vocab(language, task):
     vocab_file = read_paths(task)[key]
     with open(vocab_file, 'r') as f:
         vocab = json.load(f)
-    vocab_list = list(vocab)    
+    vocab_list = list(vocab)
     return vocab_list
 
 
