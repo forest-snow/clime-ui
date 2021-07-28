@@ -15,6 +15,7 @@ If you find our code useful, please cite:
         title={Interactive Refinement of Cross-Lingual Word Embeddings},
         author={Michelle Yuan and Mozhi Zhang and Benjamin Van Durme and Leah Findlater and Jordan Boyd-Graber},
         booktitle={Proceedings of Empirical Methods in Natural Language Processing},
+        doi="10.18653/v1/2020.emnlp-main.482",
         year={2020}
     }
 
